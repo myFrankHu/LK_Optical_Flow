@@ -1,8 +1,10 @@
 %Function opticalFlow
-% Subject: Dense Optical Flow
-% Author:  Zhongze Hu
-% $date: 11/18/2015$
-% Copyright ? Zhongze Hu. All rights reserved.
+% This function calculates dense optical flow from two input 
+% image I1 and I2.
+% Author:   Zhongze Hu
+% Email:    myfrankhu@foxmail.com
+% Created:  11/19/2015
+% Modified: 11/19/2015 
 
 function [u, v, hitMap] = opticalFlow(I1, I2, windowSize, tau)
     I1 = (I1 - min(I1(:)))./(max(I1(:))-min(I1(:)));
@@ -11,7 +13,7 @@ function [u, v, hitMap] = opticalFlow(I1, I2, windowSize, tau)
     hitMap = zeros(size(I1));
     u = zeros(size(I1));
     v = zeros(size(I1));
-    w = (windowSize(1)-1)/2;
+    w = (windowSize-1)/2;
     dx = [-1 0 1]./2; 
     dy = dx';
     IX = imfilter(I1,dx,'replicate','same');
@@ -33,11 +35,8 @@ function [u, v, hitMap] = opticalFlow(I1, I2, windowSize, tau)
            end
            hitMap(i,j) = 1;
            flow = G\b;
-           if(abs(flow(1))>5)
-              continue; 
-           end
-           u(H+1-i,j) = flow(1);
-           v(H+1-i,j) = -flow(2);
+           u(i,j) = flow(1);
+           v(i,j) = flow(2);
        end
     end
 end
